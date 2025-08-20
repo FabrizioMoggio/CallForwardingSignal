@@ -1,4 +1,4 @@
-Feature: CAMARA Call Forwarding Signal  API, v0.4.0 - Operation retrieveUnconditionalCallForwarding
+Feature: CAMARA Call Forwarding Signal  API, vwip - Operation retrieveUnconditionalCallForwarding
   # Input to be provided by the implementation to the tester
   #
   # Implementation indications:
@@ -7,10 +7,10 @@ Feature: CAMARA Call Forwarding Signal  API, v0.4.0 - Operation retrieveUncondit
   # * A device object identified by a phone number for which unconditional call forwarding service (CFS) status could be retrieved
   # * A device object identified by a phone number for which unconditional call forwarding service (CFS) status could not be retrieved
   #
-  # References to OAS spec schemas refer to schemas specified in call-forwarding-signal.yaml, version 0.4.0
+  # References to OAS spec schemas refer to schemas specified in call-forwarding-signal.yaml, version wip
 
   Background: Common call-forwarding-signal setup
-    Given the path "/call-forwarding-signal/v0.4/unconditional-call-forwardings"
+    Given the path "/call-forwarding-signal/vwip/unconditional-call-forwardings"
     And the header "Content-Type" is set to "application/json"
     And the header "Authorization" is set to a valid access token
     And the header "x-correlator" complies with the schema at "#/components/schemas/XCorrelator"
@@ -36,7 +36,7 @@ Feature: CAMARA Call Forwarding Signal  API, v0.4.0 - Operation retrieveUncondit
     # Valid testing default request body compliant with the schema
     Given the request body is set to a valid request body
     And the request body property "$.phoneNumber" is not set to a value
-    And The header "Authorization" is set to a valid access token identifying a phone number 
+    And The header "Authorization" is set to a valid access token identifying a phone number
     When the HTTP "POST" request is sent
     Then the response status code is 200
     And the response header "Content-Type" is "application/json"
@@ -130,29 +130,29 @@ Feature: CAMARA Call Forwarding Signal  API, v0.4.0 - Operation retrieveUncondit
 
   @call_forwarding_signal_404.2_call_forwarding_for_unknown_phoneNumber_from_access_token_3-legs_C02.02_phone_number_not_found
   Scenario: Phone number not found
-      Given the header "Authorization" is set to a valid access token which does not identify a single phone number
-      And the request body property "$.phoneNumber" is compliant with the schema but does not identify a valid phone number
-      When the HTTP "POST" request is sent
-      Then the response status code is 404
-      And the response property "$.status" is 404
-      And the response property "$.code" is "IDENTIFIER_NOT_FOUND"
-      And the response property "$.message" contains a user friendly text
+    Given the header "Authorization" is set to a valid access token which does not identify a single phone number
+    And the request body property "$.phoneNumber" is compliant with the schema but does not identify a valid phone number
+    When the HTTP "POST" request is sent
+    Then the response status code is 404
+    And the response property "$.status" is 404
+    And the response property "$.code" is "IDENTIFIER_NOT_FOUND"
+    And the response property "$.message" contains a user friendly text
 
   # Generic 422 error - phone number unavailable
   @call_forwarding_signal_422.1_phone_number_unavailable_2-legs_C02.04_missing_phone_number
   Scenario: Phone number not included and cannot be deducted from the access token
-      Given the header "Authorization" is set to a valid access token which does not identify a single phone number
-      And the request body property "$.phoneNumber" is not included
-      When the HTTP "POST" request is sent
-      Then the response status code is 422
-      And the response property "$.status" is 422
-      And the response property "$.code" is "MISSING_IDENTIFIER"
-        And the response property "$.message" contains a user friendly text
+    Given the header "Authorization" is set to a valid access token which does not identify a single phone number
+    And the request body property "$.phoneNumber" is not included
+    When the HTTP "POST" request is sent
+    Then the response status code is 422
+    And the response property "$.status" is 422
+    And the response property "$.code" is "MISSING_IDENTIFIER"
+    And the response property "$.message" contains a user friendly text
 
   @call_forwarding_signal_422.2_phone_number_unnecessary_3-legs_C02.03_unnecessary_phone_number
   Scenario: The "phoneNumber" parameter is included in the request
     Given the request body property "$.phoneNumber" is set to a proper value
-    And The header "Authorization" is set to a valid access token identifying same phone number 
+    And The header "Authorization" is set to a valid access token identifying same phone number
     When the HTTP "POST" request is sent
     Then the response status code is 422
     And the response property "$.status" is 422
